@@ -17,12 +17,14 @@ import app.models  # ensure models are registered
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Startup validation: verify PostgreSQL connection & ensure tables
+    # Startup validation: verify PostgreSQL connection, ensure tables & seed default users
     try:
         with engine.connect() as conn:
             conn.execute(text("SELECT 1"))
         Base.metadata.create_all(bind=engine)
-        print("[Startup] PostgreSQL database connection verified and schema synced.")
+        from app.core.seed import seed_users
+        seed_users()
+        print("[Startup] PostgreSQL database connection verified, schema synced, and default users ensured.")
     except Exception as e:
         print(f"[Startup ERROR] Failed to connect to PostgreSQL: {e}")
         raise RuntimeError(f"PostgreSQL connection failure: {e}")

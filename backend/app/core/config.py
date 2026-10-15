@@ -40,9 +40,14 @@ class Settings(BaseSettings):
     @property
     def normalized_database_url(self) -> str:
         url = self.DATABASE_URL.strip()
-        # SQLAlchemy 2.0 requires postgresql:// rather than legacy postgres://
+        # Ensure explicitly consistent postgresql+psycopg2 driver dialect
+        # Prevents SQLAlchemy from attempting to load psycopg (psycopg3) when psycopg2-binary is installed
+        if url.startswith("postgresql+psycopg://"):
+            return url.replace("postgresql+psycopg://", "postgresql+psycopg2://", 1)
         if url.startswith("postgres://"):
-            url = url.replace("postgres://", "postgresql://", 1)
+            return url.replace("postgres://", "postgresql+psycopg2://", 1)
+        if url.startswith("postgresql://"):
+            return url.replace("postgresql://", "postgresql+psycopg2://", 1)
         return url
 
     @property

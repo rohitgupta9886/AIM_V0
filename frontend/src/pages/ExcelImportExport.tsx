@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { api } from '../api/client';
+import { api, API_BASE_URL } from '../api/client';
 import { useAuth } from '../context/AuthContext';
 import { ImportBatch } from '../types';
 import { UploadCloud, FileSpreadsheet, CheckCircle2, AlertTriangle, Download, RefreshCw, FileText, CheckCircle, FileUp } from 'lucide-react';
@@ -74,12 +74,40 @@ export const ExcelImportExport: React.FC = () => {
     }
   };
 
-  const handleExportStockSummary = () => {
-    window.open('http://127.0.0.1:8000/api/reports/export/stock-summary?format=xlsx', '_blank');
+  const handleExportStockSummary = async () => {
+    try {
+      const res = await api.exportAnalysisReport({ report_type: 'stock_summary', export_format: 'xlsx' });
+      const blob = new Blob([res.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `Stock_Summary_${new Date().toISOString().slice(0, 10)}.xlsx`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error('Failed to export stock summary XLSX:', err);
+      window.open(`${API_BASE_URL}/analysis/export?report_type=stock_summary&export_format=xlsx`, '_blank');
+    }
   };
 
-  const handleExportCSV = () => {
-    window.open('http://127.0.0.1:8000/api/reports/export/stock-summary?format=csv', '_blank');
+  const handleExportCSV = async () => {
+    try {
+      const res = await api.exportAnalysisReport({ report_type: 'stock_summary', export_format: 'csv' });
+      const blob = new Blob([res.data], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `Stock_Summary_${new Date().toISOString().slice(0, 10)}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error('Failed to export stock summary CSV:', err);
+      window.open(`${API_BASE_URL}/analysis/export?report_type=stock_summary&export_format=csv`, '_blank');
+    }
   };
 
   return (

@@ -20,7 +20,7 @@ interface CustomAxiosInstance extends AxiosInstance {
   deleteCategory?: (id: number, reassign_to?: string) => Promise<any>;
 }
 
-const resolveBaseUrl = (): string => {
+export const resolveBaseUrl = (): string => {
   const envUrl = (import.meta.env.VITE_API_URL || import.meta.env.VITE_API_BASE_URL || '').trim();
   if (!envUrl) {
     return '/api';
@@ -33,8 +33,10 @@ const resolveBaseUrl = (): string => {
   return cleanUrl;
 };
 
+export const API_BASE_URL = resolveBaseUrl();
+
 const api: CustomAxiosInstance = axios.create({
-  baseURL: resolveBaseUrl(),
+  baseURL: API_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
   },

@@ -1,0 +1,66 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-slate-50 text-slate-900 min-h-screen antialiased selection:bg-indigo-500 selection:text-white;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+}
+
+/* Custom refined scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(241, 245, 249, 0.8);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.6);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 116, 139, 0.9);
+}
+
+/* Premium Card & Surface Utility Classes */
+.card-base {
+  @apply bg-white border border-slate-200/80 rounded-2xl shadow-sm transition-all duration-200;
+}
+
+.card-hover {
+  @apply hover:border-slate-300 hover:shadow-md hover:-translate-y-0.5;
+}
+
+/* Full Color Accent Cards */
+.card-indigo {
+  @apply bg-gradient-to-br from-indigo-600 to-indigo-700 text-white border border-indigo-500/40 rounded-2xl shadow-md;
+}
+.card-blue {
+  @apply bg-gradient-to-br from-blue-600 to-blue-700 text-white border border-blue-500/40 rounded-2xl shadow-md;
+}
+.card-teal {
+  @apply bg-gradient-to-br from-teal-600 to-teal-700 text-white border border-teal-500/40 rounded-2xl shadow-md;
+}
+.card-purple {
+  @apply bg-gradient-to-br from-purple-600 to-purple-700 text-white border border-purple-500/40 rounded-2xl shadow-md;
+}
+.card-amber {
+  @apply bg-gradient-to-br from-amber-500 to-amber-600 text-white border border-amber-400/40 rounded-2xl shadow-md;
+}
+.card-rose {
+  @apply bg-gradient-to-br from-rose-600 to-rose-700 text-white border border-rose-500/40 rounded-2xl shadow-md;
+}
+.card-emerald {
+  @apply bg-gradient-to-br from-emerald-600 to-emerald-700 text-white border border-emerald-500/40 rounded-2xl shadow-md;
+}
+.card-slate {
+  @apply bg-gradient-to-br from-slate-700 to-slate-800 text-white border border-slate-600/40 rounded-2xl shadow-md;
+}
+
+/* Tabular Numerals for Numerical Inventory Quantities */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}

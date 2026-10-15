@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy:pages": "wrangler pages deploy dist"
   },
   "dependencies": {
     "axios": "^1.7.9",

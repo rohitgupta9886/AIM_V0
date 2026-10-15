@@ -141,6 +141,12 @@ Fill in the deployment configuration:
 - **Build command:** `npm run build`
 - **Build output directory:** `dist`
 
+> **Note on Cloudflare Pages vs Workers:**
+> This frontend is a static Vite SPA hosted on **Cloudflare Pages**. 
+> - If deploying via Git: Cloudflare Pages automatically builds and deploys from your GitHub repository.
+> - If deploying via CLI: Use `npx wrangler pages deploy dist --project-name=<project-name>`.
+> - Do **not** run `npx wrangler deploy`, which targets Cloudflare Workers and requires a worker script.
+
 ### 3.3 Set Production Environment Variable
 Under **Environment variables (production)**, click **Add variable**:
 | Variable Name | Value | Description |
@@ -221,7 +227,7 @@ pg_restore -d "postgresql://postgres.[REF]:[PASS]@aws-0-[REGION].pooler.supabase
 - [ ] **Health Endpoint:** `GET https://your-backend.onrender.com/health` returns status `200` with `"database": "connected"`.
 - [ ] **CORS Verification:** Opening `https://your-app.pages.dev` and inspecting the network tab shows successful API preflight (`OPTIONS 204`) without CORS errors.
 - [ ] **Login Flow:** Successfully logs in with `admin` / `Admin@123` and receives JWT token stored in browser localStorage.
-- [ ] **SPA Direct Refresh:** Refreshing the browser on any view (`https://your-app.pages.dev/`) reloads properly without 404s (handled by `_redirects`).
+- [ ] **SPA Direct Refresh:** Refreshing the browser on any view (`https://your-app.pages.dev/`) reloads properly without 404s (handled natively by Cloudflare Pages SPA routing).
 - [ ] **Excel Import:** Commits `desktop.xlsx` and reconciles 204 SKUs with 100% parity.
 - [ ] **Live Mutex Locks:** Recording an outward dispatch verifies that insufficient stock is blocked by PostgreSQL row-level locks.
 - [ ] **Analytics Reports Export:** Clicking **Export Reports** downloads styled XLSX and CSV files with active date and spec filters applied.

@@ -1,0 +1,29 @@
+# Render Blueprint Specification for AIM_V0 Backend
+# Documentation: https://render.com/docs/blueprint-spec
+
+services:
+  - type: web
+    name: aim-v0-backend
+    runtime: python
+    region: oregon # or frankfurt, singapore, ohio
+    plan: free
+    rootDir: backend
+    buildCommand: "pip install -r requirements.txt && alembic upgrade head && python -m app.core.seed"
+    startCommand: "uvicorn app.main:app --host 0.0.0.0 --port $PORT"
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.8
+      - key: ENVIRONMENT
+        value: production
+      - key: DATABASE_URL
+        sync: false # Set securely in Render dashboard with your Supabase connection string
+      - key: SECRET_KEY
+        generateValue: true # Render automatically generates a secure cryptographic key
+      - key: ACCESS_TOKEN_EXPIRE_MINUTES
+        value: "1440"
+      - key: CORS_ORIGINS
+        value: "http://localhost:5173,http://127.0.0.1:5173"
+      - key: CORS_ORIGIN_REGEX
+        value: "^https:\\/\\/.*\\.pages\\.dev$"

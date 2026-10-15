@@ -36,10 +36,11 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-# CORS Middleware
+# CORS Middleware (Supporting local dev, custom domains, and Cloudflare Pages *.pages.dev)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origins_list,
+    allow_origin_regex=settings.CORS_ORIGIN_REGEX if settings.CORS_ORIGIN_REGEX else None,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -63,6 +64,8 @@ def root():
         "docs_url": "/docs"
     }
 
+# Health Check Endpoints (both /health for Render and /api/health for clients)
+@app.get("/health", tags=["System"])
 @app.get(f"{settings.API_V1_STR}/health", tags=["System"])
 def health_check(db: Session = Depends(get_db)):
     try:

@@ -28,7 +28,22 @@ class Settings(BaseSettings):
     
     # Environment
     ENVIRONMENT: str = os.getenv("ENVIRONMENT", "development")
-    CORS_ORIGINS: Union[str, List[str]] = "http://localhost:5173,http://localhost:3000,http://127.0.0.1:5173"
+    CORS_ORIGINS: Union[str, List[str]] = os.getenv(
+        "CORS_ORIGINS",
+        "http://localhost:5173,http://localhost:3000,http://127.0.0.1:5173"
+    )
+    CORS_ORIGIN_REGEX: str = os.getenv(
+        "CORS_ORIGIN_REGEX",
+        r"^https:\/\/.*\.pages\.dev$"
+    )
+
+    @property
+    def normalized_database_url(self) -> str:
+        url = self.DATABASE_URL.strip()
+        # SQLAlchemy 2.0 requires postgresql:// rather than legacy postgres://
+        if url.startswith("postgres://"):
+            url = url.replace("postgres://", "postgresql://", 1)
+        return url
 
     @property
     def cors_origins_list(self) -> List[str]:

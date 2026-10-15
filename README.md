@@ -25,6 +25,7 @@
   - [2. Backend Setup](#2-backend-setup)
   - [3. Frontend Setup](#3-frontend-setup)
   - [4. Docker Compose (Alternative)](#4-docker-compose-alternative)
+- [🌐 Production Deployment Guide (Cloudflare Pages + Render + Supabase)](./DEPLOYMENT.md)
 - [REST API Endpoints](#-rest-api-endpoints)
 - [Testing & Quality Assurance](#-testing--quality-assurance)
 - [License](#-license)
@@ -275,6 +276,17 @@ To spin up the entire application stack (PostgreSQL, Backend API, Frontend SPA) 
 ```bash
 docker compose up --build
 ```
+
+---
+
+## 🌐 Production Deployment (Cloudflare Pages + Render + Supabase)
+
+For deploying StockMatrix ERP to free-tier production cloud services:
+- **Frontend:** Cloudflare Pages (React + Vite SPA on global edge CDN)
+- **Backend:** Render Web Service (FastAPI REST API with automated migrations)
+- **Database:** Supabase PostgreSQL (Managed PostgreSQL 15 with connection pooler)
+
+👉 **Read the complete step-by-step deployment guide in [`DEPLOYMENT.md`](./DEPLOYMENT.md).**
 
 ---
 

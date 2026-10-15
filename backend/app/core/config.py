@@ -34,7 +34,7 @@ class Settings(BaseSettings):
     )
     CORS_ORIGIN_REGEX: str = os.getenv(
         "CORS_ORIGIN_REGEX",
-        r"^https:\/\/.*\.pages\.dev$"
+        r"^https:\/\/.*\.(pages|workers)\.dev$"
     )
 
     @property

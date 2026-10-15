@@ -22,7 +22,11 @@ export const Login: React.FC = () => {
       const res = await api.post('/auth/login', { username, password });
       login(res.data.access_token, res.data.user);
     } catch (err: any) {
-      setError(err.response?.data?.detail || 'Authentication failed. Please verify credentials.');
+      if (!err.response) {
+        setError('Cannot reach backend server. Please verify VITE_API_URL points to your live Render backend and CORS allows this domain.');
+      } else {
+        setError(err.response?.data?.detail || 'Authentication failed. Please verify credentials.');
+      }
     } finally {
       setIsSubmitting(false);
     }

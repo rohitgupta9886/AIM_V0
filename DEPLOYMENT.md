@@ -160,20 +160,43 @@ Under **Environment variables (production)**, click **Add variable**:
 
 ---
 
-## 📊 Phase 4: Initial Data Ingestion (`desktop.xlsx`)
+## 📊 Phase 4: Initial Data Seeding & Ingestion (`desktop.xlsx`)
 
-Once both backend and frontend are live:
-1. Open your Cloudflare Pages URL: `https://aim-v0.pages.dev`.
-2. Sign in with the pre-seeded administrator credentials:
-   - **Username:** `admin`
-   - **Password:** `Admin@123`
-3. Navigate to the **Excel Import & Reconciliation** tab in the sidebar.
-4. Upload `desktop.xlsx` (located in the root of the project).
-5. Click **Preview & Validate**:
-   - The engine will verify all 204 SKUs, inward/outward totals, and mathematical parity.
-6. Click **Confirm & Ingest Workbook**:
-   - The data is committed atomically to your Supabase PostgreSQL database.
-7. Open the **Dashboard** and **Inventory Analysis & Reports** tabs to observe the live operational metrics!
+All 204 production inventory SKUs, categories, opening balances, and initial ledger transactions are bundled with the project. You have three ways to populate your Supabase PostgreSQL database:
+
+### Option A: Fully Automatic Startup Seeding (Recommended)
+FastAPI now includes automatic startup seeding in its `lifespan` hook. 
+* Whenever the backend boots up on Render connected to Supabase:
+  1. It automatically checks if the database is empty (`Product.count() == 0`).
+  2. If empty, it reads the bundled `desktop.xlsx` workbook and atomically commits all **204 SKUs**, categories, balances, and opening records.
+  3. It seeds realistic operational dispatches and adjustments so your Analytics and Reports charts display immediate historical trends.
+  4. If data is already present, it safely skips ingestion to prevent duplicates.
+
+### Option B: Direct CLI Sync from Local Terminal
+If you want to immediately push the complete inventory dataset from your local machine to Supabase right now:
+```bash
+cd backend
+python sync_to_supabase.py "postgresql://postgres.[REF]:[PASS]@aws-0-[REGION].pooler.supabase.com:5432/postgres?sslmode=require"
+```
+Output will confirm:
+```text
+[1/3] Database connection verified successfully!
+[2/3] Ensuring all database tables exist...
+[3/3] Seeding default users and full inventory dataset...
+=======================================================
+ SYNC COMPLETE!
+   • Total Products Ingested:      204
+   • Total Stock Balances Active: 204
+   • Total Ledger Transactions:   209
+=======================================================
+```
+
+### Option C: Web UI Upload via Excel Import & Reconciliation
+You can also import new workbooks or re-import at any time:
+1. Open your live frontend.
+2. Sign in as `admin` (`Admin@123`).
+3. Navigate to **Excel Data Import & Reconciliation**.
+4. Upload `desktop.xlsx` &rarr; click **Preview & Validate** &rarr; click **Confirm & Ingest Workbook**.
 
 ---
 

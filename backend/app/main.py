@@ -22,9 +22,9 @@ async def lifespan(app: FastAPI):
         with engine.connect() as conn:
             conn.execute(text("SELECT 1"))
         Base.metadata.create_all(bind=engine)
-        from app.core.seed import seed_users
-        seed_users()
-        print("[Startup] PostgreSQL database connection verified, schema synced, and default users ensured.")
+        from app.core.seed import seed_all
+        seed_all()
+        print("[Startup] PostgreSQL database connection verified, schema synced, and data seeded.")
     except Exception as e:
         print(f"[Startup ERROR] Failed to connect to PostgreSQL: {e}")
         raise RuntimeError(f"PostgreSQL connection failure: {e}")
